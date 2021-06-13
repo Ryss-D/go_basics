@@ -6,6 +6,7 @@ import (
 	"math/rand"
 	"os"
 	"strings"
+	"time"
 )
 
 // Create a new type of ' deck'
@@ -70,9 +71,13 @@ func readFromFile(filename string) deck {
 }
 
 func (d deck) shuffle() {
+	source := rand.NewSource(time.Now().UnixNano()) // here we are creating a new seed for random generator
+	r := rand.New(source)                           //here we are creating a random generator with a random seed, making sure that the every randomizen value is different
+
+	//thats because go use the same seed  for randomize by default
 
 	for i := range d { //we can iterate just with index not always with elemsts and index
-		newPosition := rand.Intn(len(d) - 1)
+		newPosition := r.Intn(len(d) - 1)
 
 		d[i], d[newPosition] = d[newPosition], d[i]
 	}

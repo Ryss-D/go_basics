@@ -19,6 +19,8 @@ func main() {
 	cards2 := readFromFile("my_cards")
 	cards2.print()
 
+	cards2.shuffle()
+	cards2.print()
 }
 
 // to convert types on go we use de notation 1(2) where 1 is the type we want an 2 the value we have ieg. []byte("hi")
