@@ -22,7 +22,7 @@ func newDeck() deck {
 
 	for _, suit := range cardSuits { //using underscore "_" makes go now that we now that here is a variable but we will not use it (in this particular time if we didnt use _ we will have ad erro ron termianl trying to run iti)
 		for _, value := range cardValues {
-			cards = append(cards, suit+" of "+value)
+			cards = append(cards, value+" of "+suit)
 		}
 	}
 

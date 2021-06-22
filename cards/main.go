@@ -6,19 +6,9 @@ func main() {
 	cards := newDeck()
 	cards.saveToFile("my_cards")
 	hand, remainingDeck := deal(cards, 3) // hand, reaminingDeck means that we are defining two variables
-
-	cards.print()
-	fmt.Println("----- end of deck -----")
-
-	hand.print()
-	fmt.Println("----- end of hand -----")
-	remainingDeck.print()
-
-	fmt.Println(cards.toString())
-
+	fmt.Println(hand)
+	fmt.Println(remainingDeck)
 	cards2 := readFromFile("my_cards")
-	cards2.print()
-
 	cards2.shuffle()
 	cards2.print()
 }
