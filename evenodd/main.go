@@ -7,4 +7,8 @@ func main() {
 
 	fmt.Println(numbers)
 
+	for i, number := range numbers {
+		fmt.Println(i, " ", determineType(number))
+	}
+
 }

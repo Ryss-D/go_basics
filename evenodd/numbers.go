@@ -19,3 +19,13 @@ func createNumbers() []int {
 
 	return numbers
 }
+
+func determineType(n int) string {
+
+	//lest say if its even or odd
+	if n%2 == 0 {
+		return "Even"
+	} else {
+		return "Odd"
+	}
+}
