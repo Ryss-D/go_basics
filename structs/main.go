@@ -33,8 +33,12 @@ func main() {
         },
     }
 
-    jimPointer := &jim
-    jimPointer.updateName("jimmy")
+    //basic way
+   // jimPointer := &jim//now jimPointer is a reference to memory addres, where are alocated jim, that because we use & operator
+    //jimPointer.updateName("jimmy")
+    //jim.print()
+    //shortcut way
+    jim.updateName("jimmy")
     jim.print()
 }
 
@@ -55,3 +59,9 @@ func (p person) print() {
   // & is a opperator that give us th ememory address of the value this variable is pointing at, es decir give uss access to certain memory address who alocated a value
   // *pointer give us the value this memory address is pointing at, es decir give us access to certain value allocated on memory 
   //
+
+  //that dont apply to slice vecause when we create one slice go by himself create two data structures a array taht reperesent the actual slice and a slice to use 
+  // go data structures are dived into two types value types (that means that we need to use pointer to change these thing in a function)
+  //{int, float, string, bool, structs} and referenced values (Dont worry about pointers with these){slices, maps, channels, pointers, functions}
+  // will be nice check how the word ieg
+  //slices contain [lenght, capacity, and pointer to array who represent his elements]

@@ -1,0 +1,4 @@
+total 0
+-rwxrwxrwx 1 ryss-d ryss-d   0 Jul 11 12:54 hola
+-rwxrwxrwx 1 ryss-d ryss-d 215 Jul 11 12:53 main.go
+-rwxrwxrwx 1 ryss-d ryss-d   0 Jul 11  2021 pepe.txt
