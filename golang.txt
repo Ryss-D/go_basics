@@ -1,0 +1,515 @@
+Golang variables
+
+While variables are case sensitive, the case of the first letter of a variable has special meaning in Go. If a variable starts with an uppercase letter, then that variable is accessible outside the package it was declared in (or exported). If a variable starts with a lowercase letter, then it is only available within the package it is declared in.
+
+
+Golang pointers
+
+**GOLANG IS PASS BY VALUE NO BY REFERENCE**
+
+a -> variabl,e
+&a -> & adressed memory direction on a
+*&a = > * give us the value stored on a memory direction
+
+
+Function Closures
+
+Go function may be closures. A closure is a. function value that references variables from outside its body. The functions may access and assign to the referenced variables. Go supports anonymous functions, which can form closures. Anonymous functions are useful when you want to define a function inline without having a name it.
+
+Example
+
+View in Go Playground
+
+package main
+
+import "fmt"
+
+// This function `intSeq` returns another function, which
+// we define anonymously in the body of `intSeq`. The
+// returned function _closes over_ the variable `i` to
+// form a closure.
+func intSeq() func() int {
+	i := 0
+	return func() int {
+		i++
+		return i
+	}
+}
+
+func main() {
+
+	// We call `intSeq`, assigning the result (a function)
+	// to `nextInt`. This function value captures its
+	// own `i` value, which will be updated each time
+	// we call `nextInt`.
+	nextInt := intSeq()
+
+	// See the effect of the closure by calling `nextInt`
+	// a few times.
+	fmt.Println(nextInt())
+	fmt.Println(nextInt())
+	fmt.Println(nextInt())
+
+	// To confirm that the state is unique to that
+	// particular function, create and test a new one.
+	newInts := intSeq()
+	fmt.Println(newInts())
+}
+
+
+
+
+Defer
+
+A defer statement defers the execution of a function until the surrounding function returns.
+It applies to all fuctions cycle
+
+os.Create \\ create a file on operating system
+\\ it returnts a os.File typo, os.File type adress to a file descriptor, this is the adress who unique identify a open file in operating system
+\\ this is why use use *os.File to work directly on the file
+
+Stacking Defer
+
+Deferred function calls are pushed onto the stack. When a function returns, it's deferred calls are executed in LIFO (Last In First Out) order.
+
+** amazing example
+
+package main
+
+import "fmt"
+
+func main() {
+	fmt.Println("counting")
+
+	for i := 0; i < 10; i++ {
+		defer fmt.Println(i)
+	}
+
+	fmt.Println("done")
+}
+
+In go dindt exists clasees,, so methonds are simply functions defined witha specific reciver type (we cant use interfaces as receiver type)
+
+
+Go automatically handlers conversion between values and pointers for method calls. You may want tot use a pointer receiver types to avoid copying on method calls or to allow the method to mutate the receiving struct.
+
+Methods with value receiver are work as a PASS BY VALUE on receiver type, i.e. any changes done in the method will not reflect in the actual receiver object. On the other hand methods with pointer receiver will work as a PASS BY REFERENCE on receiver type, any changes done on receiver object in the method will reflect on the actual receiver object and persist outside of the method scope. Here is the example.
+
+You can You can only declare a method with a receiver whose type is defined in the same package as the method. You cannot declare a method with a receiver whose type is defined in another package (which includes the built-in types such as float).
+
+Any typo becomes part of a interface if he has the fuctions of the interface and then we can use fuctions defined for the interface in typos that belows to him ieg:
+
+type geometry interface {
+	area() float64
+	perim() float64
+}
+
+type rect struct {
+	width, height float64
+}
+type circle struct {
+	radius float64
+}
+
+func (r rect) area() float64 {
+	return r.width * r.height
+}
+func (r rect) perim() float64 {
+	return 2*r.width + 2*r.height
+}
+func (c circle) area() float64 {
+	return math.Pi * c.radius * c.radius
+}
+func (c circle) perim() float64 {
+	return 2 * math.Pi * c.radius
+}
+
+func measure(g geometry) {
+	fmt.Println(g)
+	fmt.Println(g.area())
+	fmt.Println(g.perim())
+}
+func main() {
+	r := rect{width: 3, height: 4}
+	c := circle{radius: 5}
+	measure(r)
+	measure(c)
+}
+
+
+
+Empty Interface
+
+The interface type that specifies zero methods is known as the empty interface:
+
+interface{}
+
+An empty interface may hold values of any type as every type implements at least zero methods.
+
+Empty interfaces are used by code that handles values of unknown type. For example fmt.Println() takes any number fo arguments of type interface{}
+As of now there is no support for generics in the Go, but with the help of empty interface (interface{}) we can achieve the behaviour of the generics. 
+
+
+package main
+
+import "fmt"
+
+func main() {
+	var i interface{}
+	describe(i)
+
+	i = 42
+	describe(i)
+
+	i = "hello"
+	describe(i)
+}
+
+func describe(i interface{}) {
+	fmt.Printf("(%v, %T)\n", i, i)
+}
+
+ Type assertions
+
+A type assertions provides access to an interface value's underlying concrete value.
+
+t := i.(T)
+
+This statement asserts that the interface value i holds the concrete type T and assigns the underlying T value to the variable t.
+
+if i does not hold a T, the statement will trigger a panic.
+
+To test whether an interface value holds a specific type, a type assertion can return two values: the underlying value and a boolean value that reports whether the assertion succeeded.
+
+t, ok := i.(T)
+
+
+Contains(string1, string2): returns true if given string2 is a sub set of string1.
+
+Count(string1, string2): returns no of times string2 appears as a subset in string1.
+
+HasPrefix(string1, string2): returns true if string2 is prefix of string1.
+
+HasSuffix(string1, string2): returns true if string2 is suffix of string1.
+
+Index(string1, string2): returns int index of string2 appear in string1.
+
+Join([]string, string1): joins the string slice with string1 as a concatenation string and returns the formed string.
+
+Repeat(string1, int1): return the newly created string from string1 by repeating int1 times.
+
+Replace(string1, string2, string3, int1): Replace string2 with string3 from string1 for int1 occurrences. if int1 is -1 then replace all occurrences.
+
+Split(string1, string2): Splits string1 and split character will be considered as string2
+
+ToLower(string1): returns the lowercase version of string1
+
+ToUpper(string1): returns the uppercase version of string1
+
+
+var p = fmt.Println allos us use p as a alias for fmt.Println; how we can use p("string")
+
+
+
+Go offers several printing “verbs” designed to format general Go values. For example, this prints an instance of our point struct.
+
+	p := point{1, 2}
+	fmt.Printf("struct1: %v\n", p)
+
+	// If the value is a struct, the `%+v` variant will
+	// include the struct's field names.
+	fmt.Printf("struct2: %+v\n", p)
+
+	// The `%#v` variant prints a Go syntax representation
+	// of the value, i.e. the source code snippet that
+	// would produce that value.
+	fmt.Printf("struct3: %#v\n", p)
+
+	// To print the type of a value, use `%T`.
+	fmt.Printf("type: %T\n", p)
+
+	// Formatting booleans is straight-forward.
+	fmt.Printf("bool: %t\n", true)
+
+	// There are many options for formatting integers.
+	// Use `%d` for standard, base-10 formatting.
+	fmt.Printf("int: %d\n", 123)
+
+	// This prints a binary representation.
+	fmt.Printf("bin: %b\n", 14)
+
+	// This prints the character corresponding to the
+	// given integer.
+	fmt.Printf("char: %c\n", 33)
+
+	// `%x` provides hex encoding.
+	fmt.Printf("hex: %x\n", 456)
+
+	// There are also several formatting options for
+	// floats. For basic decimal formatting use `%f`.
+	fmt.Printf("float1: %f\n", 78.9)
+
+	// `%e` and `%E` format the float in (slightly
+	// different versions of) scientific notation.
+	fmt.Printf("float2: %e\n", 123400000.0)
+	fmt.Printf("float3: %E\n", 123400000.0)
+
+	// For basic string printing use `%s`.
+	fmt.Printf("str1: %s\n", "\"string\"")
+
+
+Environment Variables
+
+Go tool excepts a certain layout of the source code. GOROOT and GOPATH are environment variables that define this layout.
+
+GOROOT is a variable that defines where your Go SDK is located. You do not need to change this variable, unless you plan to use different Go versions.
+
+GOPATH is a variable that defines the root of your workspace. By default, the workspace directory is a directory that is named go within your user home directory (~/go for Linux and macOS, %USERPROFILE%/go for Windows). GOPATH stores your code base and all the files that are necessary for your development. You can use another directory as your workspace by configuring GOPATH for different scopes. GOPATH is the root of your workspace and contains the following folders:
+
+src/: location of Go source code (for example, .go, .c, .g, .s).
+
+pkg/: location of compiled package code (for example, .a).
+
+bin/: location of compiled executable programs built by Go.
+
+
+A go-routine is a lightweight thread of execution managed by the Go runtime. creating and managing goroutines is very simple and straightforward. we can create any function or anonymous function as a goroutine by just appending go keyword to function call.
+
+go myFunction(a, b)
+
+starts a new goroutine running of function
+
+myFunction(a, b)
+
+The evaluation of myFunction, a, and b happens in current goroutine and the execution of myFunction happens in the new goroutine.
+
+Goroutines run in the same address space, so access to shared memory must be synchronised. The sync package provides useful primitives, although you wont need then much in Go as there are other primitives. (we will see them in next section)
+
+If the main goroutine finishes its execution then it does not wait for another goroutine to finish their task,
+
+
+
+Channels
+
+Channels are the pipes that connect concurrent goroutines. You can send values into channels from one goroutines and receive those values into another goroutine. Channels are a typed conduit through which you can send and receive values with the channel operator, <-.
+
+ch <- v         // send v to channel ch
+v := <- ch      // Receive from ch and assign value to v.
+
+The data flows in the direction of arrow.
+
+Like maps and slices, channels must be created before use:
+
+ch := make(chan int)
+
+Buffered Channel
+
+By default channels are unbuffered, meaning that they will only accept sends (chan <-) if there is a corresponding receive (<- chan) ready to receive the sent value. Channels can be buffered. Buffered channels accept a limited number of values without a corresponding receiver for those values.
+
+messages := make(chan string, 2)
+
+Here we make a channel of strings buffering up to 2 values. Because this channel is buffered, we can send the values into the channel without corresponding concurrent receiver.
+
+Sends to buffered channel block only when the buffer is full. Receives block when the buffer is empty.
+
+
+
+Range and Close
+
+A sender can close a channel to indicate that no more values will be sent. Receivers can test whether a channel has been closed by assigning a second parameter to the receive expression: after
+
+v, ok := <-ch
+
+ok is false if there are no more values to receive and the channel is closed.
+
+The loop for i := range c receives values from the channel repeatedly until it is closed.
+
+Note: Only the sender should close a channel, never the receiver. Sending on a closed channel will cause a panic.
+
+c chan int, close (c) close the c channel 
+
+Another note: Channels aren't like files; you don't usually need to close them. Closing is only necessary when the receiver must be told there are no more values coming, such as to terminate a range loop.
+
+if we make for i := range c { with c as channel es como ir asignando un valor del canal por cada iteracion
+
+Select
+
+The select statement let's a goroutine wait on multiple communication operations.
+
+A select blocks until one of its cases can run, then it executes that case. It chooses one at random if multiple are ready. Combining goroutines and channels with select is a powerful feature of Go.
+
+package main
+
+import (
+	"fmt"
+	"time"
+)
+
+func main() {
+
+	c1 := make(chan string)
+	c2 := make(chan string)
+
+	go func() {
+		time.Sleep(1 * time.Second)
+		c1 <- "one"
+	}()
+	go func() {
+		time.Sleep(2 * time.Second)
+		c2 <- "two"
+	}()
+
+	for i := 0; i < 2; i++ {
+		select {
+		case msg1 := <-c1:
+			fmt.Println("received", msg1)
+		case msg2 := <-c2:
+			fmt.Println("received", msg2)
+		}
+	}
+}
+
+
+Default Selection
+
+The default case in a select is run if no other case is ready.
+
+Use a default case to try a send or receive without blocking.
+
+select {
+case i := <-c:
+    // use i
+default:
+    // receiving from c would block
+}
+
+
+Channel Synchronization
+
+We can use channels to synchronize execution across goroutines. Here’s an example of using a blocking receive to wait for a goroutine to finish. When waiting for multiple goroutines to finish, you may prefer to use a WaitGroup. We will explore WaitGroup in next slides.
+
+Lets understand channel synchronization with an example:
+
+Example
+
+View in Go Playground
+
+package main
+
+import (
+	"fmt"
+	"time"
+)
+
+func worker(done chan bool) {
+	fmt.Print("working...")
+	time.Sleep(time.Second)
+	fmt.Println("done")
+
+	done <- true
+}
+
+func main() {
+
+	done := make(chan bool, 1)
+	go worker(done)
+
+	<-done
+}
+
+In the above code the function worker() called as a goroutine. the done channel will be used to notify another goroutine that the functions work is done.
+
+The main goroutine starts the worker goroutine and waits until the woker goroutine finishes its execution using <-done.
+
+The worker goroutine do its job and once it is done it informs other goroutine that worker goroutine is finished his task using done <- true.
+
+if you removed the <- done from the main function then program would exit before the worker even started.
+
+
+
+
+Channel Directions
+
+When using channels as function parameters, you can specify if a channel is meant to only send or receive values. This specificity increases the type-safety of the program.
+
+func ping(pings chan<- string, msg string) {
+    pings <- msg
+}
+
+This ping function only accepts a channel for sending values. It would be a compile-time error to try to receive on this channel.
+
+func pong(pings <-chan string, pongs chan<- string) {
+    msg := <-pings
+    pongs <- msg
+}
+
+The pong function accepts one channel for receives (pings) and a second for sends (pongs).
+
+
+package main
+
+import "fmt"
+
+func ping(pings chan<- string, msg string) {
+	pings <- msg
+}
+
+func pong(pings <-chan string, pongs chan<- string) {
+	msg := <-pings
+	pongs <- msg
+}
+
+func main() {
+	// the channel definition its self didnt have a "way" for mensagges when we talk about only accept receive or send menssges its only infunction context
+	pings := make(chan string, 1)
+	pongs := make(chan string, 1)
+	ping(pings, "passed message")
+	pong(pings, pongs)
+	fmt.Println(<-pongs)
+}
+
+
+Worker Pools
+
+In this example we will look at how to implement a worker pool using goroutines and channels.
+
+View in Go Playground
+
+package main
+
+import (
+	"fmt"
+	"time"
+)
+
+func worker(id int, jobs <-chan int, results chan<- int) {
+	for j := range jobs {
+		fmt.Println("worker", id, "started  job", j)
+		time.Sleep(time.Second)
+		fmt.Println("worker", id, "finished job", j)
+		results <- j * 2 // just thinking on j*2 as the result of work and sending it trought the channel
+	}
+}
+
+func main() {
+
+	const numJobs = 5
+	jobs := make(chan int, numJobs)
+	results := make(chan int, numJobs)
+
+	for w := 1; w <= 3; w++ {
+		go worker(w, jobs, results)
+	}
+
+	for j := 1; j <= numJobs; j++ {
+		jobs <- j
+	}
+	close(jobs)
+
+	for a := 1; a <= numJobs; a++ {
+		<-results // here we are just quing all the values who pass through results value but doing nothing with them
+		//with this we ensure that go didnt finish the main routine before the subroutines end thework, because we are waitin for the final value to get it
+	}
+
+
+

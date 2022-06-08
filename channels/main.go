@@ -58,11 +58,13 @@ func main() {
         //and thats a not desired behavior
         //go checkLink(l, c)
         // we will fix it with Function literal
-        go func(link string) {
+        go func(l string) {
             time.Sleep(5* time.Second)
-            checkLink(link, c)
+            checkLink(l, c)
         }(l)// in Literl functions we have to put another pair of parenthesis
         //at the end to invoque it
+        // in this case in particular we pass l into parenthesis because literal fucntion is
+        //using a argument beyond his isolated
     }
     // using range on a channel means wait for the valur on channel
     // it menas that l := range c is equivalen to <-c
