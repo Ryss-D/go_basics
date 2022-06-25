@@ -1,0 +1,9 @@
+[submodule "Gotter"]
+	path = Gotter
+	url = git@github.com:Ryss-D/Gotter.git
+[submodule "go_server"]
+	path = go_server
+	url = git@github.com:Ryss-D/go_server.git
+[submodule "go_mobile"]
+	path = go_mobile
+	url = git@github.com:Ryss-D/go_mobile.git
